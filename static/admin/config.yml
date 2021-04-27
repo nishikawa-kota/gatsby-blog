@@ -64,11 +64,13 @@ collections:
         name: metaDescription
         widget: text
         required: false
+        default: ''
       - label: Featured Image
         name: thumbnail
         widget: image
         hint: "Image size 1280x800 works best :)"
         required: false
+        default: ''
         media_library:
           config:
             multiple: false
