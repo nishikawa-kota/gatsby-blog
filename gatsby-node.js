@@ -1,20 +1,10 @@
 const path = require(`path`)
+const { paginate } = require("gatsby-awesome-pagination")
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions
 
   const blogPostTemplate = path.resolve(`src/templates/blogTemplate.js`)
-	const buildPagination = posts => {
-		paginate({
-			createPage,
-			items: posts,
-			itemsPerPage: 10,
-			// 2ページ目以降はURLに"/page"が付与されるよう設定
-			pathPrefix: ({ pageNumber }) => (pageNumber === 0 ? "/" : "/page"),
-			component: path.resolve('src/templates/index.js')
-		})
-	}
-
   const result = await graphql(`
     {
       allMarkdownRemark(
@@ -38,37 +28,12 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     reporter.panicOnBuild(`Error while running GraphQL query.`)
     return
   }
-  const posts = result.data.allMarkdownRemark.edges
 
-  posts.forEach((post, index) => {
-    const previous = index === posts.length - 1 ? null : posts[index + 1].node
-    const next = index === 0 ? null : posts[index - 1].node
-
-    // 記事ページ
+  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
     createPage({
-      path: `post${post.node.fields.slug}`,
-      component: blogPost,
-      context: {
-        slug: post.node.fields.slug,
-        previous,
-        next,
-      },
-    })
-
-    // 一覧ページ
-    const postsPerPage = 20
-    const numPages = Math.ceil(posts.length / postsPerPage)
-    Array.from({ length: numPages }).forEach((_, i) => {
-      createPage({
-        path: i === 0 ? `/posts` : `/posts/${i + 1}`,
-        component: blogPosts,
-        context: {
-          limit: postsPerPage,
-          skip: i * postsPerPage,
-          numPages,
-          currentPage: i + 1,
-        },
-      })
+      path: node.frontmatter.path,
+      component: blogPostTemplate,
+      context: {}, // additional data can be passed via context
     })
   })
 }
