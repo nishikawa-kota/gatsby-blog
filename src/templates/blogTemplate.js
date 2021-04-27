@@ -2,6 +2,7 @@ import React from "react"
 import Helmet from 'react-helmet';
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
+import { Link } from "gatsby"
 
 export default function Template({
   data, // this prop will be injected by the GraphQL query below.
@@ -9,6 +10,8 @@ export default function Template({
   const { site, markdownRemark } = data // data.markdownRemark holds your post data
   const { siteMetadata } = site
   const { frontmatter, html } = markdownRemark
+  console.log(data)
+  
   return (
     <Layout>
       <Helmet>
@@ -35,6 +38,8 @@ export default function Template({
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </article>
+        {/* <Link revious={previous} next={next} /> */}
+
       </div>
     </Layout>
   )
