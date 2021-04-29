@@ -7,6 +7,8 @@ const notFound = () => {
   return (
     <Layout>
       <Helmet>
+      <script data-ad-client="ca-pub-1517851734140691" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
         <title>Page not found</title>
       </Helmet>
       <div style={{textAlign: "center", padding:"5vh 0", lineHeight: "1.5"}}>

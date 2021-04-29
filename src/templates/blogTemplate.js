@@ -17,8 +17,11 @@ export default function Template({
   return (
     <Layout>
       <Helmet>
+
         <title>{frontmatter.title} | {siteMetadata.title}</title>
         <meta name="description" content={frontmatter.metaDescription} />
+        <script data-ad-client="ca-pub-1517851734140691" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
       </Helmet>
       <div className="blog-post-container">
         <article className="post">
@@ -26,7 +29,7 @@ export default function Template({
           {!frontmatter.thumbnail && (
 
             <div className="post-thumbnail">
-              asdasdads
+
               <h1 className="post-title">{frontmatter.title}</h1>
               <div className="post-meta">{frontmatter.date}</div>
             </div>

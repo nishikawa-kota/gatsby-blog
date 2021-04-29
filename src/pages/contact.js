@@ -11,6 +11,8 @@ const ContactPage = ({
   return (
     <Layout>
       <Helmet>
+      <script data-ad-client="ca-pub-1517851734140691" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
         <title>Contact — {site.siteMetadata.title}</title>
         <meta name="description" content={"Contact page of " + site.siteMetadata.description} />
       </Helmet>
