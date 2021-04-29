@@ -2,13 +2,18 @@ import React from "react"
 import Helmet from 'react-helmet';
 import { graphql } from "gatsby"
 import Layout from "../components/layout"
+import { Link } from "gatsby"
 
 export default function Template({
-  data, // this prop will be injected by the GraphQL query below.
+  data,pageContext // this prop will be injected by the GraphQL query below.
 }) {
   const { site, markdownRemark } = data // data.markdownRemark holds your post data
   const { siteMetadata } = site
   const { frontmatter, html } = markdownRemark
+  const { previous, next } = pageContext //追加
+  console.log(pageContext)
+  
+
   return (
     <Layout>
       <Helmet>
@@ -19,12 +24,15 @@ export default function Template({
         <article className="post">
           
           {!frontmatter.thumbnail && (
+
             <div className="post-thumbnail">
+              asdasdads
               <h1 className="post-title">{frontmatter.title}</h1>
               <div className="post-meta">{frontmatter.date}</div>
             </div>
           )}
           {!!frontmatter.thumbnail && (
+          
             <div className="post-thumbnail" style={{backgroundImage: `url(${frontmatter.thumbnail})`}}>
               <h1 className="post-title">{frontmatter.title}</h1>
               <div className="post-meta">{frontmatter.date}</div>
@@ -34,7 +42,31 @@ export default function Template({
             className="blog-post-content"
             dangerouslySetInnerHTML={{ __html: html }}
           />
+          <div className="pagenation-item">
+            <div className="prev-item">
+            {previous && (
+            <Link to={previous.frontmatter.path} rel="prev"  >
+              
+              <span>&laquo; Prev</span>
+
+              {previous.frontmatter.title}
+
+            </Link>
+           )}
+           </div>
+           <div className="prev-item">
+
+          {next && (
+            <Link to={next.frontmatter.path} rel="next ">
+              <span>Next &raquo;</span>
+              {next.frontmatter.title}
+
+            </Link>
+          )}
+          </div>
+          </div>
         </article>
+
       </div>
     </Layout>
   )
@@ -45,6 +77,33 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
+      }
+    }
+    allMarkdownRemark(limit: 100, sort: {fields: id, order: ASC}, skip: 0) {
+      edges {
+        node {
+          id
+          headings {
+            value
+            depth
+          }
+          frontmatter {
+            date
+            path
+            title
+          }
+        }
+        next {
+          id
+        }
+      }
+      pageInfo {
+        currentPage
+        hasNextPage
+        perPage
+        pageCount
+        itemCount
+        hasPreviousPage
       }
     }
     markdownRemark(frontmatter: { path: { eq: $path } }) {

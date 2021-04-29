@@ -410,3 +410,16 @@ body.light {
     top: 8px;
     left: 2px
 }
+.prev-item{
+  display: flex;
+    flex-direction: column;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 1em;
+    color: var(--text);
+}
+.pagenation-item {
+  display: flex;
+  /* align-items: flex-end; */
+  justify-content: space-around;
+}

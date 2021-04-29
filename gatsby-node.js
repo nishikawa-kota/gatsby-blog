@@ -5,6 +5,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions
 
   const blogPostTemplate = path.resolve(`src/templates/blogTemplate.js`)
+
   const result = await graphql(`
     {
       allMarkdownRemark(
@@ -16,6 +17,9 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
             id
             frontmatter {
               path
+              date
+              path
+              title
             }
           }
         }
@@ -29,32 +33,26 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     return
   }
 
-  result.data.allMarkdownRemark.edges.forEach(({ node }) => {
-    createPage({
-      path: node.frontmatter.path,
-      component: blogPostTemplate,
-      context: {}, // additional data can be passed via context
-    })
-  })
-  //以下を動かすとエラーが出る
-  // const postsPerPage = 4
-  // const numberOfPages = Math.ceil(posts.length / postsPerPage)
-
-  // Array.from({ length: numberOfPages }).forEach((_, index) => {
-  //   const isFirstPage = index === 0
-  //   const currentPage = index + 1
-  //   // Skip first page because of index.js
-  //   if (isFirstPage) return
-
+  // result.data.allMarkdownRemark.edges.forEach(({ node }) => {
   //   createPage({
-  //     path: `/page/${currentPage}`,
+  //     path: node.frontmatter.path,
   //     component: blogPostTemplate,
-  //     context: {
-  //       limit: postsPerPage,
-  //       skip: index * postsPerPage,
-  //       numberOfPages: numberOfPages,
-  //       currentPage: currentPage,
-  //     },
+  //     context: {}, // additional data can be passed via context
   //   })
   // })
+  const posts = result.data.allMarkdownRemark.edges
+  posts.forEach((post, index) => {
+    //前後記事
+    const previous = index === posts.length - 1 ? null : posts[index + 1].node
+    const next = index === 0 ? null : posts[index - 1].node
+    createPage({
+      path: post.node.frontmatter.path,
+      component: blogPostTemplate,
+      context: {
+        slug: post.node.frontmatter.path,
+        previous, //追加
+        next, //追加
+      },
+    })
+  })
 }
